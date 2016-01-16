@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="hansune.events.ButtonEvent"/>
+    <classEntry path="hansune.ui.abs.AbstractButton"/>
+    <classEntry path="hansune.sets.TwoImage"/>
+    <classEntry path="hansune.effects.ShootingStar"/>
+    <classEntry path="hansune.effects.StarShape"/>
+    <classEntry path="hansune.net.NConnectorData"/>
+    <classEntry path="hansune.utils.sortFileNames"/>
+    <classEntry path="hansune.geom.Position"/>
+    <classEntry path="hansune.events.XLibraryEvent"/>
+    <classEntry path="hansune.events.PropertyEvent"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

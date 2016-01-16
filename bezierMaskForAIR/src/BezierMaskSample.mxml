@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   width="800"
+					   height="600"
+					   creationComplete="onCreate(event)">
+	<fx:Script>
+		<![CDATA[
+			import flash.utils.setTimeout;
+			
+			import hansune.mask.BezierMask;
+			import hansune.mask.BezierMaskStyle;
+			import hansune.mask.BezierRectangle;
+			
+			import mx.events.FlexEvent;
+			
+			private var bezierMask:BezierMask;
+			
+			public function onCreate(e:FlexEvent):void
+			{
+				
+				const sprite:Stage = this.nativeWindow.stage;
+				
+				var bg:Shape = new Shape();
+				bg.graphics.beginFill(0x007fff, 1);
+				bg.graphics.drawRect(0,0,nativeWindow.width,nativeWindow.height);
+				bg.graphics.endFill();
+				
+				sprite.addChild(bg);
+				
+				/*
+				// Rectangle mask
+				bezierMask = new BezierMask();
+				sprite.addChild(bezierMask);
+				bezierMask.style = BezierMaskStyle.RECTANGLE;
+				bezierMask.setMask(bg);
+				bezierMask.updateByFile("data/rectmask.bmi");
+				*/
+				
+				
+				// Circle mask
+				bezierMask = new BezierMask();
+				sprite.addChild(bezierMask);
+				bezierMask.style = BezierMaskStyle.CIRCLE;
+				bezierMask.setMask(bg);
+				bezierMask.updateByFile("data/circlemask.bmi");
+				
+				
+				sprite.addEventListener(KeyboardEvent.KEY_DOWN, _keydown);
+				
+				const tf:TextField = new TextField();
+				tf.defaultTextFormat = new TextFormat(null, 14, 0x333333);
+				tf.autoSize = TextFieldAutoSize.LEFT;
+				tf.text = "click key to modify\n";
+				tf.appendText("ctrl+m : show handler\n");
+				tf.appendText("ctrl+n: hide handler");
+				tf.selectable = false;
+				tf.mouseEnabled =false;
+				sprite.addChild(tf);
+				
+			}
+			
+			private function _keydown(e:KeyboardEvent):void
+			{
+				
+				trace(e.charCode);
+				if(e.ctrlKey == false) return;
+				
+				switch(e.charCode){
+					case 109 ://m
+						bezierMask.viewHandle();
+						break;
+					
+					case 110 ://n
+						bezierMask.hideHandle();
+						break;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</s:WindowedApplication>
