@@ -12,7 +12,7 @@ package hansune.display
 	 * @author hyonsoohan
 	 * 
 	 */
-	public class MSprite extends Sprite
+	public class MSprite extends Sprite implements IDefaultPosition
 	{
 		/**
 		 * 벡터 요소

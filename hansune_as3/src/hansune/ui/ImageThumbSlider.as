@@ -1,22 +1,20 @@
-package hansune.sets
+package hansune.ui
 {
-	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
-	import flash.display.Loader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.DataEvent;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.net.URLRequest;
+	import flash.utils.clearInterval;
 	import flash.utils.clearTimeout;
 	import flash.utils.getTimer;
+	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 	
 	import hansune.Hansune;
+	import hansune.ui.ImageThumbSliderItem;
 	
 	/**
 	 * 아이템 선택시 아이템 id 전달
@@ -24,28 +22,17 @@ package hansune.sets
 	[Event(name="data", type="flash.events.DataEvent")]
 	
 	/**
-	 * 불러올 이미지를 모두 불러왔을 때.
-	 */
-	[Event(name="Complete", type="flash.events.Event")]
-	
-	
-	/**
-	 * 이미지 로드 오류
-	 */
-	[Event(name="ioError", type="flash.events.IOErrorEvent")]
-	
-	/**
 	 * 순환형 이미지 슬라이더이다. 
 	 * @author hanhyonsoo
 	 * 
 	 */
-	public class ImageRecyclingSlider extends Sprite
+	public class ImageThumbSlider extends Sprite
 	{
 		
-		private var items:Vector.<SliderItem>;//원본 아이템을 갖고 있는 배열
+		private var items:Vector.<ImageThumbSliderItem>;//원본 아이템을 갖고 있는 배열
 		private var recycleItems:Array = [];//재사용성을 위한 아이템 배열
 		
-		private var ques:Array;//파일 로드를 위한 배열 
+		private var ques:Array = [];//파일 로드를 위한 배열 
 		private var _itemViewRect:Rectangle;//아이템 이미지의 보여지는 영역지정. SliderItem.viewRect 값을 일괄설정하게 됨.
 		private var viewRect:Rectangle;//슬라이더의 보여지는 영역, 가로 세로 길이만 참조하여 전체 마스크 설정함.
 		private var viewMask:Shape;//슬라이더 마스크용
@@ -77,7 +64,7 @@ package hansune.sets
 		 * @param viewHeight
 		 * 
 		 */
-		public function ImageRecyclingSlider(viewWidth:Number = 600, viewHeight:Number = 200)
+		public function ImageThumbSlider(viewWidth:Number = 600, viewHeight:Number = 200)
 		{
 			super();
 			viewRect = new Rectangle(0, 0, viewWidth, viewHeight);
@@ -106,9 +93,7 @@ package hansune.sets
 
 		private function buildUnits():void {
 			if(items != null) return;
-			ques = [];
-			items = new Vector.<SliderItem>();
-			
+			items = new Vector.<ImageThumbSliderItem>();
 			viewMask = new Shape();
 			viewMask.graphics.beginFill(0);
 			viewMask.graphics.drawRect(0, 0, viewRect.width, viewRect.height);
@@ -137,7 +122,6 @@ package hansune.sets
 		 * @param path
 		 */
 		public function addQueFile(path:String):void {
-			buildUnits();
 			ques.push(path);
 		}
 		
@@ -148,7 +132,6 @@ package hansune.sets
 		 * @param ids
 		 */
 		public function addQueFileArray(paths:Array):void {
-			buildUnits();
 			ques = ques.concat(paths);
 		}
 		
@@ -160,19 +143,6 @@ package hansune.sets
 			buildUnits();
 			cnt = 0;
 			startLoadQue();
-		}
-		
-		/**
-		 * 비트맵을 뷰리스트에 추가한다.
-		 * Add bitmap to the viewlist
-		 * @param bitmap 뷰리스트에 추가할 비트맵
-		 * @param at 추가할 위치.
-		 * 
-		 */
-		public function addBitmap(bitmap:Bitmap, at:int = -1, id:String = ""):void {
-			if(id == "") id = items.length.toString();
-			var item:SliderItem = new SliderItem(bitmap, id);
-			//TODO 추가 예정
 		}
 		
 		/**
@@ -192,7 +162,7 @@ package hansune.sets
 		 * @param item
 		 * @param at 추가할 위치
 		 */
-		public function addSliderItem(item:SliderItem, at:int = -1):void {
+		public function addSliderItem(item:ImageThumbSliderItem, at:int = -1):void {
 			//TODO 추가 예정
 		}
 		
@@ -215,13 +185,13 @@ package hansune.sets
 				itemsBox.removeChildAt(0);
 			}
 			removeEventListener(Event.ENTER_FRAME, onRender);
-			items = new Vector.<SliderItem>();
 			
-			il = recycleItems.length;
+			il = items.length;
 			for(ix=0; ix < il; ix++) {
-				recycleItems[ix].removeEventListener(MouseEvent.CLICK, onClickItem);
+				items[ix].removeEventListener(MouseEvent.CLICK, onClickItem);
 			}
-			recycleItems = [];
+			
+			items = new Vector.<ImageThumbSliderItem>();
 		}
 		
 		
@@ -232,79 +202,75 @@ package hansune.sets
 		
 		
 		private var cnt:int = 0;//로딩 카운트
-		private function startLoadQue():void {
-			var ld:Loader = new Loader();
-			ld.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompLoad);
-			ld.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIoError);
-			ld.load(new URLRequest(ques[cnt]));
-		}
-		
-		protected function onIoError(event:IOErrorEvent):void
-		{
-			trace(event.text);
-			dispatchEvent(event.clone());
-		}
-		
+		private var interval:int = 0;
 		private var initialMotion:Boolean = false;
-		protected function onCompLoad(event:Event):void
+		
+		private function startLoadQue():void {
+			
+			clearInterval(interval);
+			var ix:int = 0;
+			var il:int = itemsBox.numChildren;
+			for(ix=0; ix < il; ix++) {
+				itemsBox.getChildAt(ix).removeEventListener(MouseEvent.MOUSE_UP, onClickItem);
+			}
+			itemsBox.removeChildren();
+			
+			cnt = 0;
+			interval = setInterval(onLoad, 30);
+		}
+		
+		protected function onLoad():void
 		{
-			var bm:Bitmap = event.currentTarget.content as Bitmap;
-			var item:SliderItem = new SliderItem(bm, cnt.toString());
+			var item:ImageThumbSliderItem = new ImageThumbSliderItem(ques[cnt], cnt.toString());
 			item.viewRect = _itemViewRect;//아이템 뷰렉트 적용
 			items.push(item);//아이템 리스트 추가
-			//계속 로드
-			if(cnt + 1< ques.length) {
-				cnt += 1;
-				startLoadQue();
+			//
+			if(cnt + 1 >= ques.length) {
+				clearInterval(interval);
+				
+				//item 앞뒤 체인 연결
+				if(cnt == 0) {
+					items[0].frontItem = items[items.length - 1];
+					items[0].rearItem = items[1];
+				}
+				else if(cnt == items.length - 1) {
+					items[items.length - 1].frontItem = items[items.length - 2];
+					items[items.length - 1].rearItem = items[0];	
+				}
+				else {
+					items[cnt].frontItem = items[cnt - 1];
+					items[cnt].rearItem = items[cnt + 1];
+				}
+				
+				initialMotion = true;
+				setTimeout(startInteraction, 1000);//1초동안 시작 모션 보여줌.
+				snapNow = getTimer();
+				addEventListener(Event.ENTER_FRAME, onRender);
 			}
 			else {
-				//item 앞뒤 체인 연결
-				items[0].frontItem = items[items.length - 1];
-				items[0].rearItem = items[1];
-				for(var i:int = 1; i<items.length - 1; i++) {
-					items[i].frontItem = items[i - 1];
-					items[i].rearItem = items[i +1];
-				}
-				items[items.length - 1].frontItem = items[items.length - 2];
-				items[items.length - 1].rearItem = items[0];
 				
 				////처음 아이템 배치
-				var tw:Number = 0;//아이템 총 가로 길이
+				var tw:Number = (item.width + itemSpan) * cnt + item.width;//아이템 총 가로 길이
 				var head:int = 0;//서칭 인덱스
-				var right:Number = viewRect.width + items[0].width * 4;//최총 가로 길이
-				cnt = 0;
-				while(1) {
+				var right:Number = viewRect.width;// + items[0].width * 4;//최총 가로 길이
+//				var idx:int = 0;
+				if(tw < right) {
+					item = items[head].clone();//아이템 복사
 					
-					if(tw < right) {
-						item = items[head].clone();//아이템 복사
-						
-						item.tx = (item.width + itemSpan) * (cnt - 2);//아이템 타겟 지점
-						item.x =  (item.width + itemSpan) * (cnt - 1);//아이템 시작 지점
-						
-						cnt ++;
-						head ++;
-						if(head >= items.length) {
-							head = 0;
-						}
-						
-						tw += item.width;
-						//item.setLabel(head.toString()); // 라벨표시
-						recycleItems.push(item);//재사용 배열에 추가
-						itemsBox.addChild(item);//디스플레이 리스트에 추가
-						
-					} 
-					else {
-						
-						initialMotion = true;
-						setTimeout(startInteraction, 1000);//1초동안 시작 모션 보여줌.
-						snapNow = getTimer();
-						addEventListener(Event.ENTER_FRAME, onRender);
-						dispatchEvent(new Event(Event.COMPLETE));
-						break;
+					item.tx = (item.width + itemSpan) * (cnt - 2);//아이템 타겟 지점
+					item.x =  (item.width + itemSpan) * (cnt - 1);//아이템 시작 지점
+					
+					cnt ++;
+					head ++;
+					if(head >= items.length) {
+						head = 0;
 					}
-				}
-				
-				
+					
+					
+					//item.setLabel(head.toString()); // 라벨표시
+					itemsBox.addChild(item);//디스플레이 리스트에 추가
+					
+				} 
 			}
 		}
 		
@@ -327,7 +293,7 @@ package hansune.sets
 			var ix:int = 0;
 			var il:int = itemsBox.numChildren;
 			for(ix=0; ix < il; ix++) {
-				SliderItem(itemsBox.getChildAt(ix)).addEventListener(MouseEvent.MOUSE_UP, onClickItem);
+				ImageThumbSliderItem(itemsBox.getChildAt(ix)).addEventListener(MouseEvent.MOUSE_UP, onClickItem);
 			}
 		}
 		
@@ -376,9 +342,9 @@ package hansune.sets
 		private function itemsToSnapTarget():void {
 			var ix:int = 0;
 			var il:int = itemsBox.numChildren;
-			var item:SliderItem;
+			var item:ImageThumbSliderItem;
 			for(ix=0; ix < il; ix++) {
-				item = SliderItem(itemsBox.getChildAt(ix));
+				item = ImageThumbSliderItem(itemsBox.getChildAt(ix));
 				item.tx = (item.width + itemSpan) * (ix - 2);//아이템 타겟 지점
 			}
 		}
@@ -403,7 +369,7 @@ package hansune.sets
 				var ix:int = 0;
 				var il:int = itemsBox.numChildren;
 				for(ix=0; ix < il; ix++) {
-					SliderItem(itemsBox.getChildAt(ix)).tx += (event.stageX - px);
+					ImageThumbSliderItem(itemsBox.getChildAt(ix)).tx += (event.stageX - px);
 				}
 				px = event.stageX;//이전 좌표 저장
 			}
@@ -426,11 +392,11 @@ package hansune.sets
 		private function onRender(e:Event):void {
 			var ix:int = 0;
 			var il:int = itemsBox.numChildren;
-			var item:SliderItem;
+			var item:ImageThumbSliderItem;
 			//초기 진입 모션
 			if(initialMotion) {
 				for(ix=0; ix < il; ix++) {
-					item = SliderItem(itemsBox.getChildAt(ix));
+					item = ImageThumbSliderItem(itemsBox.getChildAt(ix));
 					item.x += (item.tx - item.x) * 0.2;
 				}
 				return;
@@ -442,14 +408,14 @@ package hansune.sets
 						if(getTimer() - snapNow > snapTime) { 
 							snapNow = getTimer();
 							for(ix=0; ix < il; ix++) {
-								item = SliderItem(itemsBox.getChildAt(ix));
+								item = ImageThumbSliderItem(itemsBox.getChildAt(ix));
 								item.tx -= (item.width + itemSpan);
 							}
 						}
 					}
 					else {
 						for(ix=0; ix < il; ix++) {
-							item = SliderItem(itemsBox.getChildAt(ix));
+							item = ImageThumbSliderItem(itemsBox.getChildAt(ix));
 							item.tx -= 5;
 						}
 					}
@@ -458,12 +424,12 @@ package hansune.sets
 			
 			//아이템 이동
 			for(ix=0; ix < il; ix++) {
-				item = SliderItem(itemsBox.getChildAt(ix));
+				item = ImageThumbSliderItem(itemsBox.getChildAt(ix));
 				item.x += (item.tx - item.x) * 0.2;
 			}
 			
 			//가장 앞의 아이템
-			var first:SliderItem = itemsBox.getChildAt(0) as SliderItem;
+			var first:ImageThumbSliderItem = itemsBox.getChildAt(0) as ImageThumbSliderItem;
 			//일정범위를 넘어서면 삭제
 			if(first.x < - (first.width + itemSpan) * 2.5) {
 				recycleItems.push(itemsBox.removeChild(first));
@@ -476,7 +442,7 @@ package hansune.sets
 				itemsBox.addChildAt(item, 0);
 			}
 			//가장 뒤의 아이템
-			var last:SliderItem = itemsBox.getChildAt(itemsBox.numChildren - 1) as SliderItem;
+			var last:ImageThumbSliderItem = itemsBox.getChildAt(itemsBox.numChildren - 1) as ImageThumbSliderItem;
 			if(last.x < viewRect.width + last.width) {
 				item = getRecyclable(last.rearItem.id);
 				item.x = last.x + item.width * 1.3 + itemSpan;
@@ -491,8 +457,8 @@ package hansune.sets
 		
 		
 		//화면상에 보이는 아이템들의 재사용률을 높이기 위해 새로운 아이템이 아니면 재사용하도록 함
-		private function getRecyclable(id:String):SliderItem {
-			var item:SliderItem;
+		private function getRecyclable(id:String):ImageThumbSliderItem {
+			var item:ImageThumbSliderItem;
 			for each(item in recycleItems) {
 				if(item.id == id && !itemsBox.contains(item)) {
 					return item;//해당 id 와 같은 사용하지 않는 아이템이 있을 경우 

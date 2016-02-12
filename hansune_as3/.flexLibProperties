@@ -11,6 +11,10 @@
     <classEntry path="hansune.geom.Position"/>
     <classEntry path="hansune.events.XLibraryEvent"/>
     <classEntry path="hansune.events.PropertyEvent"/>
+    <classEntry path="hansune.ui.ImageThumbSliderItemScaling"/>
+    <classEntry path="hansune.gl.randomColor"/>
+    <classEntry path="hansune.display.IDefaultPosition"/>
+    <classEntry path="hansune.utils.Log"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

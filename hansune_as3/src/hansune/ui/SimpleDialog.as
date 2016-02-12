@@ -4,6 +4,7 @@
     import flash.display.Bitmap;
     import flash.display.DisplayObject;
     import flash.display.DisplayObjectContainer;
+    import flash.display.Shape;
     import flash.display.Sprite;
     import flash.events.EventDispatcher;
     import flash.events.MouseEvent;
@@ -15,8 +16,6 @@
     import flash.utils.getTimer;
     import flash.utils.setTimeout;
     
-	import hansune.assets.SimpleDialogBg;
-	
     import hansune.motion.SooTween;
     import hansune.motion.easing.Cubic;
     
@@ -84,7 +83,7 @@
         private var button:TestButton;
         private var clickFnc:Function;
         private var dimShape:Sprite;
-        private var bg:SimpleDialogBg;
+        private var bg:Shape;
         private var container:Sprite;
         
         public function set y(value:Number):void {
@@ -257,9 +256,10 @@
                 w = lb.width + MARGIN + MARGIN;
                 h = lb.height + MARGIN + MARGIN;
 				
-                if(bg == null) bg = new SimpleDialogBg();
-                bg.width = w;
-                bg.height = h;
+                if(bg == null) bg = new Shape();
+				bg.graphics.beginFill(0xffffff);
+				bg.graphics.drawRect(0,0,w,h);
+				bg.graphics.endFill();
                 container.addChild(bg);
                 
                 lb.x = -lb.width/2;
@@ -272,9 +272,10 @@
                 w = Math.max(lb.width, button.width) + MARGIN * 2;
                 h = MARGIN + lb.height + SPACE + button.height + MARGIN;
                 
-                if(bg == null) bg = new SimpleDialogBg();
-                bg.width = w;
-                bg.height = h;
+                if(bg == null) bg = new Shape();
+				bg.graphics.beginFill(0xffffff);
+				bg.graphics.drawRect(0,0,w,h);
+				bg.graphics.endFill();
                 container.addChild(bg);
                 
                 lb.x = -lb.width/2;

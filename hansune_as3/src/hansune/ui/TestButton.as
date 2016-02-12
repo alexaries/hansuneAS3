@@ -60,31 +60,31 @@ import flash.display.DisplayObject;
 import flash.display.Shape;
 import flash.display.SimpleButton;
 
-import hansune.assets.TestButtonBgDown;
-import hansune.assets.TestButtonBgOver;
-import hansune.assets.TestButtonBgUp;
-
 internal class CustomSimpleButton extends SimpleButton {
 	
     public function CustomSimpleButton(w:Number = 80, h:Number = 20) {
-		var shape:DisplayObject = new TestButtonBgDown();
-		shape.width = w;
-		shape.height = h;
+		var shape:Shape = new Shape();
+		shape.graphics.beginFill(0x999999);
+		shape.graphics.drawRect(0,0,w,h);
+		shape.graphics.endFill();
         downState = shape;
         
-		shape = new TestButtonBgOver();
-		shape.width = w;
-		shape.height = h;
+		shape = new Shape();
+		shape.graphics.beginFill(0xafafaf);
+		shape.graphics.drawRect(0,0,w,h);
+		shape.graphics.endFill();
 		overState = shape;
         
-		shape = new TestButtonBgUp();
-		shape.width = w;
-		shape.height = h;
+		shape = new Shape();
+		shape.graphics.beginFill(0xffffff);
+		shape.graphics.drawRect(0,0,w,h);
+		shape.graphics.endFill();
 		upState = shape;
 		
-		shape = new TestButtonBgDown();
-		shape.width = w;
-		shape.height = h;
+		shape = new Shape();
+		shape.graphics.beginFill(0xafafaf);
+		shape.graphics.drawRect(0,0,w,h);
+		shape.graphics.endFill();
         hitTestState = shape;
         useHandCursor = true;
     }

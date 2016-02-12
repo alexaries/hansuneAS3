@@ -5,17 +5,17 @@ package
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	
-	import hansune.sets.ImageRecyclingSlider;
+	import hansune.ui.ImageThumbSlider;
 
 	[SWF(width="600", height="400")]
 	public class ImageRecyclingSliderExample extends Sprite
 	{
-		private var slider:ImageRecyclingSlider;
+		private var slider:ImageThumbSlider;
 		
 		public function ImageRecyclingSliderExample()
 		{
 			
-			slider = new ImageRecyclingSlider(400, 200);
+			slider = new ImageThumbSlider(400, 200);
 			slider.itemViewRect = new Rectangle(0, 0, 100, 100);
 			slider.itemSpan = 10;
 			slider.addQueFile("../data/kim.jpg");
