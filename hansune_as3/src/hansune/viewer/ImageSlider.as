@@ -42,6 +42,9 @@
 		private var change:String;
 		private var direction:int = JUST;
 		
+		private const container:Sprite = new Sprite();
+		private const masking:Shape = new Shape();
+		
 		/**
 		 * ImageSlider Constructor
 		 * @param	viewWidth width size to show
@@ -57,12 +60,20 @@
 			this.viewWidth = viewWidth;
 			this.viewHeight = viewHeight;
 			
-			var bmd:BitmapData = new BitmapData(viewWidth, viewHeight, false, 0xffffff);
+			masking.graphics.beginFill(0);
+			masking.graphics.drawRect(0, 0, viewWidth, viewHeight);
+			masking.graphics.endFill();
+			
+			this.addChild(container);
+			this.addChild(masking);
+			container.mask = masking;
+			
+			var bmd:BitmapData = new BitmapData(viewWidth, viewHeight, false, 0x00ffffff);
 			this.imageA = new Bitmap(bmd);
 			this.imageB = new Bitmap(bmd);
-			addChildAt(imageA,0);
+			container.addChild(imageA);
 			this.imageB.x = viewWidth;
-			addChildAt(imageB,0);
+			container.addChild(imageB);
 			
 			this.current = "A";
 		}
@@ -204,7 +215,7 @@
 //			} else {
 //				SooTween.moveTo(this["_image" + _current], ( _viewWidth), this["_image" + _current].y, 1, Quadratic.easeInOut);
 //			}
-			
+			container.addChild(this["image" + change]);
 			SooTween.moveTo(this["image" + change], 0, 0, 0.7, Quadratic.easeInOut, endMotion);
 		}
 		
@@ -212,7 +223,7 @@
 			current = change;
 			isIng = false;
 			dispatchEvent(new Event(Event.COMPLETE));
-			Log.d(className, "endMotion");
+			//Log.d(className, "endMotion");
 		}
 		
 //		private function _changeMotion(e:Event):void {
