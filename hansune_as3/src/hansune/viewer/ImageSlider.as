@@ -44,6 +44,8 @@
 		
 		private const container:Sprite = new Sprite();
 		private const masking:Shape = new Shape();
+		private var tweenShow:SooTween;
+		private var tweenHide:SooTween;
 		
 		/**
 		 * ImageSlider Constructor
@@ -209,14 +211,17 @@
 					break;
 			}
 			
-			SooTween.moveTo(this["image" + current], tx, ty, 1, Quadratic.easeInOut);
+			if(tweenHide != null && tweenHide.isPlaying) tweenHide.finish();
+			tweenHide = SooTween.moveTo(this["image" + current], tx, ty, 1, Quadratic.easeInOut);
 //			if (direction == "next") {
 //				SooTween.moveTo(this["_image" + _current], ( -_viewWidth), this["_image" + _current].y, 1, Quadratic.easeInOut);
 //			} else {
 //				SooTween.moveTo(this["_image" + _current], ( _viewWidth), this["_image" + _current].y, 1, Quadratic.easeInOut);
 //			}
 			container.addChild(this["image" + change]);
-			SooTween.moveTo(this["image" + change], 0, 0, 0.7, Quadratic.easeInOut, endMotion);
+			
+			if(tweenShow != null && tweenShow.isPlaying) tweenShow.finish();
+			tweenShow = SooTween.moveTo(this["image" + change], 0, 0, 0.7, Quadratic.easeInOut, endMotion);
 		}
 		
 		private function endMotion():void {
