@@ -6,7 +6,7 @@ package
 	import flash.utils.setTimeout;
 	
 	import hansune.motion.easing.Strong;
-	import hansune.sets.GradientBg;
+	import hansune.display.GradientBg;
 	
 	[SWF(width="800", height="600")]
 	public class gradientBg_example extends Sprite

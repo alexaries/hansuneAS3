@@ -1,6 +1,6 @@
-package hansune.ui
+package hansune.display
 {
-	public class ImageThumbSliderItemScaling
+	public class ImageHolderScaling
 	{
 		public static const NO_SCALE:int = 0;
 		public static const FILL_RECT:int = 1;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="bitmapLoaderEx.as" projectUUID="5dee66d6-6e2c-442c-a1ae-769adb5ef8e3" version="11">
+<actionScriptProperties analytics="false" mainApplicationPath="simpleVideo_example.as" projectUUID="5dee66d6-6e2c-442c-a1ae-769adb5ef8e3" version="11">
   <compiler additionalCompilerArguments="-locale en_US" advancedTelemetry="false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
@@ -33,18 +33,17 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="bitmapLoaderEx.as"/>
     <application path="easyDialog_sample.as"/>
-    <application path="ImageRecyclingSliderExample.as"/>
     <application path="zoomViewerEx.as"/>
+    <application path="bitmapLoaderEx.as"/>
     <application path="STween_example.as"/>
     <application path="swf2loaderExample.as"/>
-    <application path="stringUtilsEx.as"/>
     <application path="scaleByAnchorEx.as"/>
+    <application path="stringUtilsEx.as"/>
     <application path="shootingStarEx.as"/>
     <application path="bytesvideo_ex.as"/>
-    <application path="simpleVideo_example.as"/>
     <application path="BgWipersample.as"/>
+    <application path="simpleVideo_example.as"/>
     <application path="loopVideo_example.as"/>
     <application path="miniScalingViewEx.as"/>
   </applications>

@@ -1,4 +1,4 @@
-package hansune.ui
+package hansune.display
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;
@@ -14,12 +14,14 @@ package hansune.ui
 	
 	[Event(name="ioError", type="flash.events.IOErrorEvent")]
 	
+	[Event(name="complete", type="flash.events.Event")]
+	
 	/**
-	 * CycleImageSlider 에 사용하는 아이템
+	 * Load and Hold image
 	 * @author hanhyonsoo
 	 * 
 	 */
-	public class ImageThumbSliderItem extends Sprite
+	public class ImageHolder extends Sprite
 	{
 		
 		/**
@@ -68,28 +70,28 @@ package hansune.ui
 		}
 		
 		//mask shape
-		protected var ms:Shape;
+		protected var masking:Shape;
 		
 		/**
-		 * 앞에 있는 아이템
+		 * front item for chaining
 		 */
-		public var frontItem:ImageThumbSliderItem;
+		public var frontItem:ImageHolder;
 		/**
-		 * 뒤에 있는 아이템
+		 * rear item for chaining
 		 */
-		public var rearItem:ImageThumbSliderItem;
+		public var rearItem:ImageHolder;
 		
 		
 		public var path:String;
 		
 		
 		/**
-		 * CycleImageSlider 에 사용하는 아이템 
-		 * @param path 이미지 경
-		 * @param id 분별 인덱스
+		 * ImageHolder constructor 
+		 * @param path url to load image
+		 * @param id just identity
 		 * 
 		 */
-		public function ImageThumbSliderItem(path:String = null, id:String = "")
+		public function ImageHolder(path:String = null, id:String = "")
 		{
 			super();
 			this.id = id;
@@ -105,9 +107,12 @@ package hansune.ui
 			}
 		}
 		
-		public function load():void {
+		
+		public function load(path:String = null):void {
 			
 			cleanUp();
+			
+			if(path != null) this.path = path; //use parameter
 			
 			if(path == null || path.length < 1) return;
 			var ld:Loader = new Loader();
@@ -157,8 +162,8 @@ package hansune.ui
 		 * @return 
 		 * 
 		 */
-		public function clone():ImageThumbSliderItem {
-			var slider:ImageThumbSliderItem = new ImageThumbSliderItem(this.path, this.id);
+		public function clone():ImageHolder {
+			var slider:ImageHolder = new ImageHolder(this.path, this.id);
 			slider.setImage(new Bitmap(this.image.bitmapData.clone()));
 			slider.viewRect = this.viewRect;
 			slider.frontItem = this.frontItem;
@@ -167,7 +172,7 @@ package hansune.ui
 			return slider;
 		}
 		
-		private var _scaling:int = ImageThumbSliderItemScaling.FILL_RECT;
+		private var _scaling:int = ImageHolderScaling.FILL_RECT;
 		
 		public function get scaling():int {
 			return _scaling;
@@ -179,19 +184,19 @@ package hansune.ui
 		}
 		// TODO
 		private function updateScale():void {
-			if(ms != null && image != null) {
-				addChild(ms);
-				image.mask = ms;
+			if(masking != null && image != null) {
+				addChild(masking);
+				image.mask = masking;
 				var scale:Number = 1.0;
 				switch(_scaling) {
-					case ImageThumbSliderItemScaling.NO_SCALE:
+					case ImageHolderScaling.NO_SCALE:
 						image.x = -_viewRect.x;
 						image.y = -_viewRect.y;
 						image.scaleX = 1;
 						image.scaleY = 1;
 						break;
 					
-					case ImageThumbSliderItemScaling.FULL_IMAGE:
+					case ImageHolderScaling.FULL_IMAGE:
 						if(image.width > _viewRect.width || image.height > _viewRect.height) {
 							scale = Math.min(_viewRect.width / image.width, _viewRect.height / image.height);
 						}
@@ -201,7 +206,7 @@ package hansune.ui
 						image.y = Math.floor((_viewRect.height - image.height) / 2);
 						break;
 					
-					case ImageThumbSliderItemScaling.FILL_RECT:
+					case ImageHolderScaling.FILL_RECT:
 						if(image.width > _viewRect.width || image.height > _viewRect.height) {
 							scale = Math.max(_viewRect.width / image.width, _viewRect.height / image.height);
 						}
@@ -242,11 +247,11 @@ package hansune.ui
 		public function set viewRect(rect:Rectangle):void {
 			if(rect != null) {
 				_viewRect = rect;
-				if(ms == null) ms = new Shape();
-				ms.graphics.clear();
-				ms.graphics.beginFill(0);
-				ms.graphics.drawRect(0, 0, _viewRect.width, _viewRect.height);
-				ms.graphics.endFill();
+				if(masking == null) masking = new Shape();
+				masking.graphics.clear();
+				masking.graphics.beginFill(0);
+				masking.graphics.drawRect(0, 0, _viewRect.width, _viewRect.height);
+				masking.graphics.endFill();
 				
 				if(image != null) {
 					updateScale();
@@ -254,9 +259,9 @@ package hansune.ui
 			}
 			else {
 				_viewRect = null;
-				if(ms != null) {
-					ms.graphics.clear();
-					if(contains(ms)) removeChild(ms);
+				if(masking != null) {
+					masking.graphics.clear();
+					if(contains(masking)) removeChild(masking);
 				}
 				
 				if(image != null){
@@ -273,7 +278,7 @@ package hansune.ui
 		 * 
 		 */
 		public function get viewRect():Rectangle {
-			if(ms == null) {
+			if(masking == null) {
 				return null;
 			}
 			else {
@@ -283,12 +288,13 @@ package hansune.ui
 		
 		/**
 		 * Release containing items.
-		 * 포함하고 있는 요소들의 연결을 해제 시킨다.
 		 */
 		public function release():void {
-			if(contains(ms)) removeChild(ms);
-			if(contains(image)) removeChild(image);
-			image.bitmapData.dispose();
+			if(masking != null && contains(masking)) removeChild(masking);
+			if(image != null && contains(image)) {
+				removeChild(image);
+				image.bitmapData.dispose();
+			}
 		}
 		
 	}

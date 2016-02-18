@@ -3,7 +3,7 @@
   <includeClasses>
     <classEntry path="hansune.events.ButtonEvent"/>
     <classEntry path="hansune.ui.abs.AbstractButton"/>
-    <classEntry path="hansune.sets.TwoImage"/>
+    <classEntry path="hansune.display.TwoImage"/>
     <classEntry path="hansune.effects.ShootingStar"/>
     <classEntry path="hansune.effects.StarShape"/>
     <classEntry path="hansune.net.NConnectorData"/>
@@ -11,7 +11,7 @@
     <classEntry path="hansune.geom.Position"/>
     <classEntry path="hansune.events.XLibraryEvent"/>
     <classEntry path="hansune.events.PropertyEvent"/>
-    <classEntry path="hansune.ui.ImageThumbSliderItemScaling"/>
+    <classEntry path="hansune.display.ImageHolderScaling"/>
     <classEntry path="hansune.gl.randomColor"/>
     <classEntry path="hansune.display.IDefaultPosition"/>
     <classEntry path="hansune.utils.Log"/>

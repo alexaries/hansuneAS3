@@ -3,7 +3,7 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import hansune.sets.BgWiper;
+	import hansune.display.BgWiper;
 	[SWF(width="400",height="400",backgroundColor="#000000",frameRate="50")]
 	
 	public class BgWipersample extends Sprite {

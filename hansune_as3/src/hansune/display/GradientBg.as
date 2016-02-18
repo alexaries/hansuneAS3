@@ -10,7 +10,7 @@
 * GNU General Public License for more details.
 */
 
-package hansune.sets {
+package hansune.display {
 
 	import flash.display.GradientType;
 	import flash.display.InterpolationMethod;

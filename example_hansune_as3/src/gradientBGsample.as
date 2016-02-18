@@ -1,6 +1,6 @@
 ﻿package {
 	
-	import hansune.sets.GradientBg;
+	import hansune.display.GradientBg;
 	import flash.display.GradientType;
 	import flash.display.Sprite;
 	import flash.events.Event;

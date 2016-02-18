@@ -1,13 +1,9 @@
 package hansune.ui
 {
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
-	import flash.text.TextFormatAlign;
-	
-	import flashx.textLayout.formats.TextAlign;
 	
 	import hansune.Hansune;
 	
@@ -48,15 +44,12 @@ package hansune.ui
 			tfield.y = 3;
 			 
 			button = new CustomSimpleButton(tfield.width + 10, tfield.height + 6);
-			button.x = button.width / 2;
-			button.y = button.height / 2;
 			addChildAt(button,0);
 			
 		}
 	}
 }
 
-import flash.display.DisplayObject;
 import flash.display.Shape;
 import flash.display.SimpleButton;
 

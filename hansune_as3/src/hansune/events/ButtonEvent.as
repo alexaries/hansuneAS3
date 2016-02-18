@@ -12,25 +12,31 @@ package hansune.events
 		static public const DRAG:String = "btDrag";
 		static public const ERROR:String = "btError";
 		
-		private var _value:uint;
+		private var _intValue:uint;
 		public function get intiger():uint{
-			return _value;
+			return _intValue;
 		}
 		
-		private var _data:String;
+		private var _stringValue:String;
 		public function get data():String {
-			return _data;
+			return _stringValue;
 		}
 		
 		override public function toString():String{
-			return this.type + "/" + this.bubbles + "/" + this.cancelable + "/" + this._data + "/" + this._value;
+			return this.type + "/" + this.bubbles + "/" + this.cancelable + "/" + this._stringValue + "/" + this._intValue;
 		} 
 		
-		public function ButtonEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, stringValue:String = "", intigerValue:uint=0)
-		{
-			_value = intigerValue;
-			_data = stringValue;
-			super(type, bubbles, cancelable);
+		override public function clone():Event {
+			const e:ButtonEvent = new ButtonEvent(type, bubbles, cancelable, _stringValue, _intValue);
+			return e;
 		}
+		
+		public function ButtonEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false, stringValue:String = "", intValue:uint=0)
+		{
+			_intValue = intValue;
+			_stringValue = stringValue;
+			super(type, bubbles, cancelable); 
+		}
+		
 	}
 }

@@ -9,8 +9,6 @@ package hansune.effects
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flash.events.TimerEvent;
 	import flash.filters.BitmapFilter;
 	import flash.filters.BitmapFilterQuality;
 	import flash.filters.BlurFilter;

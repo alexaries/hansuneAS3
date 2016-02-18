@@ -68,7 +68,7 @@ package
 			star.addEventListener(Event.COMPLETE, onCompStar);
 			*/
 			
-			var star:ShootingStar = new ShootingStar(6, ShootingStar.EMMIT_WANDER);
+			var star:ShootingStar = new ShootingStar(100, ShootingStar.EMMIT_WANDER);
 			star.x = e.stageX;
 			star.y = e.stageY;
 			star.sessionId = sessionID;
@@ -86,7 +86,7 @@ package
 			star.wanderAreaType = ShootingStar.EMMIT_AREA_CIRCLE;
 			star.wanderArea = 70;
 			star.isFinishInIdle = false;
-			star.shootingInterval = 1000;
+			star.shootingInterval = 100;
 			star.starType = StarShape.STAR;
 			star.addEventListener(Event.COMPLETE, onCompStar);
 			

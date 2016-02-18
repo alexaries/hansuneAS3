@@ -22,18 +22,38 @@ package hansune.ui
 		 * @param bm
 		 * 
 		 */
-		public function set defaultUpImage(bm:Bitmap):void {
+		public function set upImage(bm:Bitmap):void {
 			_upDef = bm;
 			addChild(_upDef);
 		}
 		
+		/**
+		 * default image 
+		 * @return bitmap
+		 * 
+		 */
+		public function get upImage():Bitmap {
+			return _upDef;
+		}
+		
 		private var _dnDef:Bitmap;
+		
+		
+		/**
+		 * down image 
+		 * @return bitmap
+		 * 
+		 */
+		public function get downImage():Bitmap {
+			return _dnDef;
+		}
+		
 		/**
 		 * default image for down image 
 		 * @param bm
 		 * 
 		 */
-		public function set defaultDownImage(bm:Bitmap):void {
+		public function set downImage(bm:Bitmap):void {
 			_dnDef = bm;
 			addChild(_dnDef);
 		}
@@ -57,7 +77,7 @@ package hansune.ui
 		
 		public var id:int = -1;
 		
-		public function SimpleButton(defaultUpImage:Bitmap = null, defaultDownImage:Bitmap = null)
+		public function SimpleButton(upImage:Bitmap = null, downImage:Bitmap = null)
 		{
 			super();
 			trans = new Sprite();
@@ -66,8 +86,8 @@ package hansune.ui
 			trans.graphics.endFill();
 			trans.alpha = 0;
 			
-			this.defaultUpImage = defaultUpImage;
-			this.defaultDownImage = defaultDownImage;
+			this.upImage = upImage;
+			this.downImage = downImage;
 			
 			eventEnable = _eventEnable;
 			selected = false;

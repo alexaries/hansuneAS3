@@ -22,7 +22,28 @@
 	
 	public class ImageSlider extends Sprite
 	{
-		public static function get className():String {
+
+		public function get viewHeight():uint
+		{
+			return _viewHeight;
+		}
+
+		public function set viewHeight(value:uint):void
+		{
+			_viewHeight = value;
+		}
+
+		public function get viewWidth():uint
+		{
+			return _viewWidth;
+		}
+
+		public function set viewWidth(value:uint):void
+		{
+			_viewWidth = value;
+		}
+
+		public function get className():String {
 			return "ImageSlider";
 		}
 		
@@ -35,8 +56,8 @@
 		private var imageA:Bitmap;
 		private var imageB:Bitmap;
 		private var isIng:Boolean;
-		private var viewWidth:uint;
-		private var viewHeight:uint;
+		private var _viewWidth:uint;
+		private var _viewHeight:uint;
 		private var _mask:Shape;
 		private var current:String;
 		private var change:String;
