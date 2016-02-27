@@ -114,21 +114,22 @@ package hansune.display
 			
 			if(path != null) this.path = path; //use parameter
 			
-			if(path == null || path.length < 1) return;
+			if(this.path == null || this.path.length < 1) return;
 			var ld:Loader = new Loader();
 			ld.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompLoad);
 			ld.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIoError);
-			ld.load(new URLRequest(path));
+			ld.load(new URLRequest(this.path));
+			
 		}
 		
 		protected function onIoError(event:IOErrorEvent):void {
-			trace(event.text);
+			//trace(event.text);
 			dispatchEvent(event.clone());
 		}
 		
 		private var initialMotion:Boolean = false;
 		protected function onCompLoad(event:Event):void {
-			trace(event.type);
+			//trace(event.type);
 			this.setImage(event.currentTarget.content as Bitmap);
 			if(this.image != null) {
 				dispatchEvent(event.clone());
