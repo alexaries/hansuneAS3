@@ -1,5 +1,6 @@
 package hansune.text
 {
+	import flash.text.TextField;
 
 	/**
 	* 	String Utilities class by Ryan Matsikas, Feb 10 2006
@@ -709,5 +710,98 @@ package hansune.text
 			}
 		}
 
+		//
+		
+		private static var MaxPointSize:int = 40;
+		private static var MinPointSize:int = 24;
+		
+		/**
+		 * Fit text size to the target TextField 
+		 * @param target TextField
+		 * @param msg text in target
+		 * @param maxLines
+		 * @param targetWidth
+		 * @param maxSize
+		 * @param minSize
+		 * @return 
+		 * 
+		 */		
+		public static function fitText(target:TextField, msg:String, maxLines:uint = 1, targetWidth:Number = -1, maxSize:uint = 72, minSize:uint = 12):uint 
+		{ 
+			MaxPointSize = maxSize;
+			MinPointSize = minSize;
+			
+			target.htmlText = msg;
+			
+			if (targetWidth == -1) 
+			{ 
+				targetWidth = target.width; 
+			} 
+			
+			var pixelsPerChar:Number = targetWidth / msg.length; 
+			
+			var pointSize:Number = Math.min(maxSize, Math.round(pixelsPerChar * 1.8 * maxLines)); 
+			
+			if (pointSize < 6) 
+			{ 
+				// the point size is too small 
+				return pointSize; 
+			} 
+			
+			//this.changeSize(pointSize);
+			target.getTextFormat().size = pointSize;
+			
+			if (target.numLines > maxLines) 
+			{ 
+				return shrinkText(target, --pointSize, maxLines); 
+			} 
+			else 
+			{ 
+				return growText(target, pointSize, maxLines); 
+			} 
+		} 
+		
+		private static function growText(target:TextField, pointSize:Number, maxLines:uint = 1):Number 
+		{ 
+			if (pointSize >= MaxPointSize) 
+			{ 
+				return pointSize; 
+			} 
+			
+			//this.changeSize(pointSize + 1);
+			target.getTextFormat().size = pointSize + 1;
+			
+			if (target.numLines > maxLines) 
+			{ 
+				// set it back to the last size 
+				//this.changeSize(pointSize);
+				target.getTextFormat().size = pointSize;
+				return pointSize; 
+			} 
+			else 
+			{ 
+				return growText(target, pointSize + 1, maxLines); 
+			} 
+		} 
+		
+		private static function shrinkText(target:TextField, pointSize:Number, maxLines:uint=1):Number 
+		{ 
+			if (pointSize <= MinPointSize) 
+			{ 
+				return pointSize; 
+			} 
+			
+			//this.changeSize(pointSize);
+			target.getTextFormat().size = pointSize;
+			
+			if (target.numLines > maxLines) 
+			{ 
+				return shrinkText(target, pointSize - 1, maxLines); 
+			} 
+			else 
+			{ 
+				return pointSize; 
+			} 
+		}
 	}
 }

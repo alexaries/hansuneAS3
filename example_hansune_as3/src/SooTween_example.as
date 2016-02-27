@@ -4,14 +4,13 @@ package
 	import flash.display.Sprite;
 	
 	import hansune.motion.SooTween;
-	import hansune.motion.easing.Cubic;
 	
     [SWF(height="800", width="600")]
-	public class STween_example extends Sprite
+	public class SooTween_example extends Sprite
 	{
 		private var mc:Shape = new Shape();
 		
-		public function STween_example()
+		public function SooTween_example()
 		{
 			super();
 			/*

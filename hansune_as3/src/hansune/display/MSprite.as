@@ -31,14 +31,7 @@ package hansune.display
 		
 		public var tx:Number, ty:Number, tz:Number;
 		
-		/**
-		 * 기본 위치 x
-		 */
-		protected var dx:Number = 0;
-		/**
-		 * 기본 위치 y
-		 */
-		protected var dy:Number = 0;
+		
 		
 		/**
 		 * 벡터 요소를 포함시킨 Sprite 임.
@@ -87,49 +80,19 @@ package hansune.display
 		}
 		
 		/**
-		 * 기본 위치로부터 이전 위치로 이동
-		 * 
+		 * 기본 위치
 		 */
-		public function gotoFront():void {
-			this.x = dx - v.vx;
-			this.y = dy - v.vy;
-		}
-		
-		/**
-		 * 기본 위치로부터 다음 위치로 이동
-		 * 
-		 */
-		public function gotoRear():void {
-			this.x = dx + v.vx;
-			this.y = dy + v.vy;
-		}
+		protected var dp:Position = new Position();
 		
 		/**
 		 * 기본 위치로 이동
 		 * 
 		 */
 		public function gotoDefault():void {
-			this.x = dx;
-			this.y = dy;
+			this.x = dp.x;
+			this.y = dp.y;
 		}
 		
-		/**
-		 * 기본 위치로부터 이전 위치
-		 * @return 
-		 * 
-		 */
-		public function get front():Position {
-			return new Position(dx - v.vx, dy - v.vy);
-		}
-		
-		/**
-		 * 기본 위치로부터 다음 위치
-		 * @return 
-		 * 
-		 */
-		public function get rear():Position {
-			return new Position(dx + v.vx, dy + v.vy);
-		}
 		
 		/**
 		 * 기본 위치 지정<br>
@@ -139,8 +102,9 @@ package hansune.display
 		 * 
 		 */
 		public function setDefaultPosition(x:Number, y:Number):void {
-			dx = x;
-			dy = y;
+			if(dp == null) dp = new Position();
+			dp.x = x;
+			dp.y = y;
 		}
 		
 		/**
@@ -149,8 +113,47 @@ package hansune.display
 		 * 
 		 */
 		public function get defaultPosition():Position {
-			return new Position(dx, dy);
+			if(dp == null) return dp;
+			return dp;
 		}
+		
+		/**
+		 * 기본 위치로부터 이전 위치로 이동
+		 * 
+		 */
+		public function gotoFront():void {
+			this.x = dp.x - v.vx;
+			this.y = dp.y - v.vy;
+		}
+		
+		/**
+		 * 기본 위치로부터 다음 위치로 이동
+		 * 
+		 */
+		public function gotoRear():void {
+			this.x = dp.x + v.vx;
+			this.y = dp.y + v.vy;
+		}
+		
+		/**
+		 * 기본 위치로부터 이전 위치
+		 * @return 
+		 * 
+		 */
+		public function get front():Position {
+			return new Position(dp.x - v.vx, dp.y - v.vy);
+		}
+		
+		/**
+		 * 기본 위치로부터 다음 위치
+		 * @return 
+		 * 
+		 */
+		public function get rear():Position {
+			return new Position(dp.x + v.vx, dp.y + v.vy);
+		}
+		
+		
 		
 		/**
 		 * 속도 지정

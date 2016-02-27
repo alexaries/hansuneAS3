@@ -6,7 +6,6 @@ package hansune.display
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.filters.BlurFilter;
-	import flash.utils.Dictionary;
 	
 	import hansune.motion.SooTween;
 	
