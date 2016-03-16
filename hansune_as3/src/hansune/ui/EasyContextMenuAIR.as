@@ -1,6 +1,7 @@
 ﻿package hansune.ui
 {
 	import flash.display.InteractiveObject;
+	import flash.display.NativeMenuItem;
 	import flash.display.NativeWindow;
 	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
@@ -26,7 +27,7 @@
 	public class EasyContextMenuAIR extends EventDispatcher
 	{
 		private var window:NativeWindow;
-		static private var _context:ContextMenu;
+		private var contextMenu:ContextMenu;
 		private var _iObject:InteractiveObject;
 		
 		/**
@@ -34,9 +35,9 @@
 		 * @return ContextMenu
 		 * 
 		 */
-		static public function get context():ContextMenu
+		public function get context():ContextMenu
 		{
-			return _context;
+			return contextMenu;
 		}
         
         /**
@@ -45,19 +46,34 @@
          */
         public var hookingExit:Boolean = false;
 		
+		private static var instance:EasyContextMenuAIR;
+		/**
+		 * 클래스 인스턴스로  
+		 * @return 
+		 * 
+		 */
+		public static function getInstance():EasyContextMenuAIR {
+			if(instance == null) {
+				trace("Must call 'makeInstance' first.");
+				return null;
+			}
+			return instance;
+		}
+		
 		public function EasyContextMenuAIR(iObj:InteractiveObject, nWindow:NativeWindow) 
 		{	
 			Hansune.ver();
             
-			_context = new ContextMenu();
-			_context.hideBuiltInItems();
+			contextMenu = new ContextMenu();
+			contextMenu.hideBuiltInItems();
 			addCustomMenuItems();
 
 			_iObject = iObj;
-			_iObject.contextMenu = _context;
+			_iObject.contextMenu = contextMenu;
 
 			window = nWindow;
 
+			instance = this;
 		}
         
         /**
@@ -77,21 +93,21 @@
 
 		private function addCustomMenuItems():void {
 
-			var item3:ContextMenuItem = new ContextMenuItem("--");
-			//var item4:ContextMenuItem = new ContextMenuItem("", true);
-			var item5:ContextMenuItem = new ContextMenuItem("Hide Mousepoint", true);
+			var item2:NativeMenuItem = new ContextMenuItem("[ MENU ]");
+			var item4:NativeMenuItem = new ContextMenuItem("Show Mousepoint", true);
+			var item5:NativeMenuItem = new ContextMenuItem("Hide Mousepoint");
+			var item8:NativeMenuItem = new ContextMenuItem("FullScreen - No Scale");
+			var item7:NativeMenuItem = new ContextMenuItem("NormalScreen - Show All");
+			var item9:NativeMenuItem = new ContextMenuItem("EXIT");
 			
-			var item8:ContextMenuItem = new ContextMenuItem("FullScreen - No Scale");
-			var item7:ContextMenuItem = new ContextMenuItem("NormalScreen");
-			var item9:ContextMenuItem = new ContextMenuItem("EXIT");
-			
-			_context.customItems.push(item3);
-			//_context.customItems.push(item4);
-			_context.customItems.push(item5);
-			_context.customItems.push(item8);
-			_context.customItems.push(item7);
-			_context.customItems.push(item9);
+			contextMenu.addItem(item2);
+			contextMenu.addItem(item4);
+			contextMenu.addItem(item5);
+			contextMenu.addItem(item8);
+			contextMenu.addItem(item7);
+			contextMenu.addItem(item9);
 
+			item4.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, showMousepoint);
 			item5.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, hideMousepoint);
 			item8.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, fullScreen);
 			item7.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, normalScreen);
@@ -99,24 +115,43 @@
 		}
 		
 		/**
-		 * 컨텐스트 메뉴 추가 
-		 * @param name 이름
+		 * 메뉴 추가 
+		 * @param label 메뉴 이름
 		 * @param contextListener ContextMenuEvent 리스너
 		 * 
 		 */
-		public function addMenuItem(name:String, contextListener:Function):void {
+		public function addMenuItem(label:String, contextListener:Function):void {
 			
-			var item:ContextMenuItem;
-			if(_context.customItems.length == 6)
+			var item:NativeMenuItem;
+			if(contextMenu.numItems == 6)
 			{
-				item = new ContextMenuItem(name,  true);
+				item = new ContextMenuItem(label,  true);
 			}
 			else 
 			{
-				item = new ContextMenuItem(name);
+				item = new ContextMenuItem(label);
 			}
-			_context.customItems.push(item);
+			contextMenu.addItem(item);
 			item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, contextListener);
+		}
+		
+		/**
+		 * 메뉴 삭제
+		 * @param label 삭제할 메뉴의 이름 
+		 * 
+		 */		
+		public function removeMenuItem(label:String):void {
+			
+			var index:int = -1;
+			for (var i:int = 0; i < contextMenu.numItems; i++) 
+			{
+				if(contextMenu.getItemAt(i).label == label) {
+					index = i;
+					break;
+				}
+			}
+			
+			if(index > -1) contextMenu.removeItemAt(index);
 		}
 		
 		/**
@@ -126,6 +161,15 @@
 		 */
 		public function hideMousepoint(event:ContextMenuEvent = null):void {
 			Mouse.hide();
+		}
+		
+		/**
+		 * Show mouse point
+		 * @param event
+		 * 
+		 */
+		public function showMousepoint(event:ContextMenuEvent = null):void {
+			Mouse.show();
 		}
 		
 		/**
@@ -148,7 +192,7 @@
 		 */
 		public function normalScreen(event:ContextMenuEvent =  null):void {
 			window.stage.displayState = StageDisplayState.NORMAL;
-			_iObject.stage.scaleMode = StageScaleMode.NO_SCALE;
+			_iObject.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			_iObject.scaleX = 1;
 			_iObject.scaleY = 1;
 		}
@@ -170,4 +214,6 @@
 		}
 	}
 }
+
+
 

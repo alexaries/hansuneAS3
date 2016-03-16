@@ -258,7 +258,7 @@
 				
                 if(bg == null) bg = new Shape();
 				bg.graphics.beginFill(0xffffff);
-				bg.graphics.drawRect(0,0,w,h);
+				bg.graphics.drawRect(-w/2,-h/2,w,h);
 				bg.graphics.endFill();
                 container.addChild(bg);
                 

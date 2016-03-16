@@ -98,19 +98,25 @@ package hansune.display
 			this.path = path;
 		}
 		
-		private function cleanUp():void {
-			release();
+		
+		private var _backgroundColor:uint = 0xffffff;
+		public function set backgroundColor(value:uint):void {
+			_backgroundColor = value;
 			if(_viewRect != null) {
-				graphics.beginFill(0xaaaaaa);
+				graphics.beginFill(value);
 				graphics.drawRect(0, 0, _viewRect.width, _viewRect.height);
 				graphics.endFill();
 			}
 		}
 		
+		public function get backgroundColor():uint {
+			return _backgroundColor;
+		}
+		
 		
 		public function load(path:String = null):void {
 			
-			cleanUp();
+			release();
 			
 			if(path != null) this.path = path; //use parameter
 			

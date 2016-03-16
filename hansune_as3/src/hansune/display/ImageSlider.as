@@ -184,8 +184,9 @@
 			}
 		}
 		
-		private function onIoError(e:IOErrorEvent):void{
+		protected function onIoError(e:IOErrorEvent):void{
 			Log.e(className, e.toString());
+			dispatchEvent(e.clone());
 		}
 		
 		private function beforePosition(dis:DisplayObject):void {

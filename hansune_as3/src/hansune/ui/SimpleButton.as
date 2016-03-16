@@ -5,6 +5,7 @@ package hansune.ui
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
 	import hansune.events.ButtonEvent;
@@ -62,8 +63,10 @@ package hansune.ui
 		 * Whether it changes up/down state by clicking or not.
 		 */
 		public var stateChagiable:Boolean = true;
-		
+		private var _selected:Boolean = false;
 		public function set selected(value:Boolean):void {
+			clearTimeout(stateTimeout);//clear the timeout id of state-changing 
+			_selected = value;
 			if(value){
 				setDownState();
 			} else {
@@ -72,7 +75,7 @@ package hansune.ui
 		}
 		
 		public function get selected():Boolean {
-			return (_dnDef.visible);
+			return _selected;
 		}
 		
 		public var id:int = -1;
@@ -148,19 +151,21 @@ package hansune.ui
 		}
 		
 		private var downCheck:Boolean = false;
+		private var stateTimeout:uint = 0;
 		private function onClick(e:MouseEvent):void {
 			
 			if(eventEnable) dispatchEvent(new ButtonEvent(ButtonEvent.CLICK, false, false, "", id));
 			if(!stateChagiable) return;
-			if(downCheck) {
-				//trace("downCheck == true");
-				//setUpState();
-				setTimeout(setUpState, 150);
+			
+			if(selected) {
+				setDownState();
+			}
+			else if(downCheck) {
+				stateTimeout = setTimeout(setUpState, 50);
 			}
 			else {
-				//trace("downCheck == false");
 				setDownState();
-				setTimeout(setUpState, 150);
+				stateTimeout = setTimeout(setUpState, 50);
 			}
 		}
 		
