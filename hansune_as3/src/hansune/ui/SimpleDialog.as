@@ -1,14 +1,12 @@
 ﻿package hansune.ui
 {
     
-    import flash.display.Bitmap;
     import flash.display.DisplayObject;
-    import flash.display.DisplayObjectContainer;
     import flash.display.Shape;
     import flash.display.Sprite;
     import flash.events.EventDispatcher;
     import flash.events.MouseEvent;
-    import flash.geom.Point;
+    import flash.filters.DropShadowFilter;
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
@@ -228,7 +226,6 @@
         }
         
         private function onClick(e:MouseEvent):void {
-            hide();
             clickFnc();
         }
         
@@ -274,7 +271,7 @@
                 
                 if(bg == null) bg = new Shape();
 				bg.graphics.beginFill(0xffffff);
-				bg.graphics.drawRect(0,0,w,h);
+				bg.graphics.drawRect(-w/2,-h/2,w,h);
 				bg.graphics.endFill();
                 container.addChild(bg);
                 
@@ -343,6 +340,7 @@
 				
 				container.scaleX = 0;
 				container.scaleY = 0;
+				container.filters = [new DropShadowFilter(0,0,0,1,10,10)];
 				
                 context.stage.addChild(container);
 				
@@ -361,11 +359,11 @@
             if(isHideAfter){
                 clearTimeout(timeId);
             }
-            container.removeChild(bg);
-            container.removeChild(lb);
+            if(container.contains(bg)) container.removeChild(bg);
+			if(container.contains(lb)) container.removeChild(lb);
 			
             if(button != null){
-                container.removeChild(button);
+				if(container.contains(button)) container.removeChild(button);
                 button.removeEventListener(MouseEvent.CLICK, onClick);
             }
             
@@ -374,7 +372,7 @@
                 if(dimShape != null && context.stage.contains(dimShape)){
                     context.stage.removeChild(dimShape);
                 }
-                context.stage.removeChild(container);
+				if(context.stage.contains(container)) context.stage.removeChild(container);
             }
             
             for(var i:int =0; i<dialogArray.length; i++){
