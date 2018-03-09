@@ -1,7 +1,5 @@
 package hansune.mask
 {
-	import __AS3__.vec.Vector;
-	
 	import flash.geom.Point;
 	
 	public class AbsBezierInfo

@@ -54,7 +54,7 @@ package hansune.media
 		private var pIsPlaying:Boolean;
 		private var pIsAlphaZeroStart:Boolean = false;
 		private var pVideo:Video;
-		private var pBufferTime:uint = 0.1;
+		private var pBufferTime:Number = 0.1;
 		private var connection_video:NetConnection = new NetConnection();
 		private var pNetStream:NetStream;
 		private var _loop:Boolean = false;
@@ -147,7 +147,7 @@ package hansune.media
 		 * @return 
 		 * 
 		 */
-		public function get bufferTime():uint
+		public function get bufferTime():Number
 		{
 			return pBufferTime;
 		}
@@ -156,7 +156,7 @@ package hansune.media
 		 * @return 
 		 * 
 		 */
-		public function set bufferTime(value:uint):void
+		public function set bufferTime(value:Number):void
 		{
 			pBufferTime = value;
 		}

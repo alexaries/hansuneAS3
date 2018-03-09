@@ -116,7 +116,6 @@ package hansune.gl
 				aaCircle(centerX, centerY, r);
 				return;
 			}			
-			  var r:int;
 			  var xx:int = 0;
 			  var yy:int = r;
 			  var d:Number = 1-r;//(5-4*r)/2;

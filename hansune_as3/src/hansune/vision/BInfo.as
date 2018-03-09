@@ -1,7 +1,5 @@
 ﻿package hansune.vision 
 {
-	import __AS3__.vec.Vector;
-	
 	public class BInfo
 	{
 		public var dotX:Vector.<Number>;

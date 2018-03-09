@@ -53,7 +53,7 @@ package hansune.media
 		private var pIsPlaying:Boolean;
 		private var pIsAlphaZeroStart:Boolean = false;
 		private var pVideo:Video;
-		private var pBufferTime:uint = 0.1;
+		private var pBufferTime:Number = 0.1;
 		private var streamClient:Object = new Object();
 		private var pNetStream:NetStream;
 		private var connection_video:NetConnection = new NetConnection();

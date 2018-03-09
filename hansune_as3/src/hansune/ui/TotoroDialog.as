@@ -32,7 +32,7 @@
          * @param value
          * 
          */
-        public static function set x(value:int):void {
+        public static function set x(value:Number):void {
             basisX = value;
         }
         /**
@@ -40,7 +40,7 @@
          * @param value
          * 
          */
-        public static function set y(value:int):void {
+        public static function set y(value:Number):void {
             basisY = value;
         }
         

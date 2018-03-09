@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 // 
-//   https://github.com/brownsoo/AS3-Hansune 
+//   https://github.com/brownsoo/HansuneAS3
 //   Apache License 2.0  
 //
 //------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ package hansune
 	public class Hansune
 	{
 		public static const AUTHOR:String = "han hyon soo";
-		public static const HOME:String = "blog.hansune.com";
+		public static const HOME:String = "blog.hansoolabs.com";
 		public static const VERSION:String = "1.41";
 		public static const encoding:String = "utf-8";
 		

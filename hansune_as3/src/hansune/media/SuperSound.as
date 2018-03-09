@@ -175,7 +175,6 @@ package hansune.media
 			
 			if(instance == null) {
 				throw new IllegalOperationError("build 명령어를 먼저 수행해야 합니다.");
-				return;
 			}
 			
 			instance.effectSound.name = name;
