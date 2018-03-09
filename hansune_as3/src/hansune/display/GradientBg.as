@@ -55,10 +55,10 @@ package hansune.display {
 		
 
 		//gradient value
-		private var type:String;
-		private var colors:Array = new Array();
-		private var alphas:Array = new Array();
-		private var ratios:Array = new Array();
+		private var type:String = GradientType.LINEAR;
+		private var colors:Array = [];
+		private var alphas:Array = [];
+		private var ratios:Array = [];
 		private var spreadMethod:String;
 		private var interp:String;
 		private var focalPtRatio:Number;

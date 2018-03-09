@@ -22,7 +22,7 @@ package hansune
 {
 	public class Hansune
 	{
-		public static const AUTHOR:String = "han hyon soo";
+		public static const AUTHOR:String = "brownsoo";
 		public static const HOME:String = "blog.hansoolabs.com";
 		public static const VERSION:String = "1.41";
 		public static const encoding:String = "utf-8";
